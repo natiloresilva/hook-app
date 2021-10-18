@@ -4,22 +4,22 @@ export const useFetch = (url) => {
 
     const isMounted = useRef(true)
 
-   const [state, setstate] = useState({data: null, loading: true, error: null})
+    const [state, setstate] = useState({ data: null, loading: true, error: null })
 
-   useEffect(() => {
-      return () => {
-          isMounted.current = false
-      }
-   }, [])
+    useEffect(() => {
+        return () => {
+            isMounted.current = false
+        }
+    }, [])
 
-   useEffect(() => {
-       
-    fetch(url)
-        .then( resp => resp.json())
-        .then( data => {
+    useEffect(() => {
+
+        fetch(url)
+            .then(resp => resp.json())
+            .then(data => {
 
                 //El useRef nos ayudará en este caso a saber si me componente está montado o no
-                if( isMounted.current ){
+                if (isMounted.current) {
                     setstate({
                         loading: false,
                         error: null,
@@ -27,9 +27,16 @@ export const useFetch = (url) => {
                     })
                 }
 
-        })
-   }, [url])
+            })
+            .catch(() => {
+                setstate({
+                    data: null,
+                    loading: false,
+                    error: 'No se pudo cargar la información solicitada'
+                })
+            })
+    }, [url])
 
-   return state
+    return state
 
 }
